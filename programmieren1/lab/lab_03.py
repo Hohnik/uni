@@ -1,5 +1,6 @@
 from collections import Counter, defaultdict
 from lab_01_pp_primes import is_prime
+import doctest
 
 
 def max_product(lst:list):
@@ -213,31 +214,31 @@ def is_anagram_dict(s1, s2):
             dicts[i][letter] += 1
     return dicts[0] == dicts[1]
 
-def most_popular_names():
-    """
-    Using the information in the file 'popular_names.txt' (see files attached to this lab), build two dictionaries, one for male names, and one for female names, and return the two dictionaries.
-    Come up with two reasonable doctests!
-    >>> most_popular_names()["males"]["James"]
-    '4,625,363'
-    >>> most_popular_names()["males"]["Tyler"]
-    '597,268'
-    >>> most_popular_names()["females"]["Amy"]
-    '683,154'
-    >>> most_popular_names()["females"]["Marie"]
-    '337,979'
-    """
+# def most_popular_names():
+#     """
+#     Using the information in the file 'popular_names.txt' (see files attached to this lab), build two dictionaries, one for male names, and one for female names, and return the two dictionaries.
+#     Come up with two reasonable doctests!
+#     >>> most_popular_names()["males"]["James"]
+#     '4,625,363'
+#     >>> most_popular_names()["males"]["Tyler"]
+#     '597,268'
+#     >>> most_popular_names()["females"]["Amy"]
+#     '683,154'
+#     >>> most_popular_names()["females"]["Marie"]
+#     '337,979'
+#     """
 
-    males, females = defaultdict(str), defaultdict(str)
+#     males, females = defaultdict(str), defaultdict(str)
 
-    with open("../files/popular_names.csv", "r") as file:
-        for line in file:
-            if "#" in line:
-                continue
-            _, maleName, maleNameCount, femaleName, femaleNameCount = line.split()
-            males[maleName] = maleNameCount
-            females[femaleName] = femaleNameCount
+#     with open("../files/popular_names.csv", "r") as file:
+#         for line in file:
+#             if "#" in line:
+#                 continue
+#             _, maleName, maleNameCount, femaleName, femaleNameCount = line.split()
+#             males[maleName] = maleNameCount
+#             females[femaleName] = femaleNameCount
     
-    return {"males":males, "females": females}
+#     return {"males":males, "females": females}
 
 def word_count():
     """
@@ -278,7 +279,7 @@ def word_count():
 def make_primes():
     """
     Using a single (possibly nested) list comprehension, compute the set of prime numbers from 0 to
-    99 (inclusive). Your list comprehension should return a list of lists, where the \(i\)-th list is the list of prime numbers in [i*10, (i*10)+9]. The result should look something like: [[2, 3, 5, 7], [11, 13, 17, 19], ...]. Use the known function is_prime(x) that returns True if x is prime
+    99 (inclusive). Your list comprehension should return a list of lists, where the i-th list is the list of prime numbers in [i*10, (i*10)+9]. The result should look something like: [[2, 3, 5, 7], [11, 13, 17, 19], ...]. Use the known function is_prime(x) that returns True if x is prime
     and False otherwise.
     >>> type(make_primes())
     <class 'list'>
@@ -377,3 +378,5 @@ Compute without a computer
               [42, 0], 
               [42, 0]]
 """
+
+doctest.testmod()
