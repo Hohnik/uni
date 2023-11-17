@@ -230,7 +230,7 @@ def is_anagram_dict(s1, s2):
 
 #     males, females = defaultdict(str), defaultdict(str)
 
-#     with open("../files/popular_names.csv", "r") as file:
+#     with open("files/popular_names.csv", "r") as file:
 #         for line in file:
 #             if "#" in line:
 #                 continue
@@ -250,7 +250,7 @@ def word_count():
     * Write the 200 most common words, and their counts,
     to a file 'top200.txt'
     """
-    with open("../files/shakespeare.txt") as file:
+    with open("files/shakespeare.txt") as file:
         counter = Counter()
         for line in file:
             counter.update(list(map(str.lower,line.split())))
@@ -269,7 +269,7 @@ def word_count():
                 break
 
         #Task4
-        with open("../files/top200.txt", "w+") as file:
+        with open("files/top200.txt", "w+") as file:
             for wordTuple in counter.most_common(200):
                 word, frequency = wordTuple
                 file.write(f"{word}, {frequency}\n")
