@@ -1,6 +1,5 @@
 import operator  # we don't know yet what this line does...
 
-
 def another_add(x, y):
     """
     The next few lines are so called 'doc tests'
@@ -23,6 +22,18 @@ def another_add(x, y):
         result = x - y
     return result
 
+def is_prime(number):
+    isPrime = True
+    for i in range(2, number):
+        if number % i == 0:
+            isPrime = False
+    return isPrime
 
-print_result = print(another_add(another_add(3, 4), another_add(4, 5)))
-print(print_result)
+
+def smallest_factor(n: int):
+    if is_prime(n):
+        return n
+
+    for i in range(2, n):
+        if n % i == 0:
+            return smallest_factor(int(n / i))

@@ -11,5 +11,9 @@
     Bidirectional search
 * c) The problem with removing one of the fork pieces is, that every fork piece adds a new track but you have to have a second piece to be able to close it again. So you can only remove even numbers of forks.
 
-### 1. *Uniform-Cost-Search* == *A\*-Search*? 
+### 2. *Uniform-Cost-Search* == *A\*-Search*? 
+
+How I understood it, Uniform-Cost-Search is just a special case of the A*-Search that has a dumb heuristic, that doesn't sort the Frontier.
+
+Both 
 
