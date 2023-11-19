@@ -11,9 +11,13 @@
     Bidirectional search
 * c) The problem with removing one of the fork pieces is, that every fork piece adds a new track but you have to have a second piece to be able to close it again. So you can only remove even numbers of forks.
 
-### 2. *Uniform-Cost-Search* == *A\*-Search*? 
 
-How I understood it, Uniform-Cost-Search is just a special case of the A*-Search that has a dumb heuristic, that doesn't sort the Frontier.
+### 3. *Uniform-Cost-Search* == *A\*-Search*? 
 
-Both 
+How I understood it, Uniform-Cost-Search (cheapest-cost-search) is just a special case of the A*-Search that has a easy heuristic, that sorts the frontier just based on the cheapest path cost.
 
+
+
+### 6. Explain why the UTILITY of a MAX player using MINIMAX against a unoptimal MIN player will always be higher or equal than against a optimal MIN player.
+
+Its because the MAX player always predicts all possible plays and the selects the best possible outcome if the min player plays optimaly. If the min player doesn't play optimal the margin is most of the time much higher because the min player makes mistakes which lead to higher utility for the max player.
