@@ -28,7 +28,7 @@ def breadth_first_search(puzzle):
 
     return False
 
-def depth_first_search(puzzle, limit): #TODO Fix!
+def depth_limited_search(puzzle, limit): #TODO Fix!
 
     node = Node(puzzle.initial)
     frontier = deque(node) # FIFO (Stack)
@@ -50,7 +50,7 @@ def depth_first_search(puzzle, limit): #TODO Fix!
 
     return result
 
-def best_first_search(puzzle, f):
+def best_first_graph_search(puzzle, f):
     """Search the nodes with the lowest f scores first."""
     node = Node(puzzle.initial)
     frontier = PriorityQueue('min', f)
@@ -76,7 +76,12 @@ def best_first_search(puzzle, f):
 def h(node):
     """Default heuristic function h(n) = number of misplaced tiles """
     goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
-
+    mannhattan_distance = [
+        (0, 1, 2, 1, 2, 3, 2, 3, 4),
+        (1, 0, 1, 2, 1, 2, 3, 2, 3),
+        (2, 1, 0, 3, 2, 1, 4, 3, 2),
+        ]
+    one = (0, 1, 2, 1, 2, 3, 2, 3, 4)
     pass
 
 
@@ -91,8 +96,8 @@ def f(node):
 def astar_search(puzzle):
     """A* search is best-first graph search with f(n) = g(n)+h(n).
     You need to specify the f function when you call astar_search."""
-    #return best_first_graph_search(puzzle, f)
-    
+    return best_first_graph_search(puzzle, f)
+
 
 def is_empty(frontier):
     return True if len(frontier) == 0 else False

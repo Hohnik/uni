@@ -4,7 +4,7 @@ from functools import partial
 from tkinter import *
 from typing import List, Any
 
-from search import best_first_search, breadth_first_search, astar_search, depth_first_search
+from search import best_first_graph_search, breadth_first_search, astar_search, depth_limited_search
 
 
 class EightPuzzle:
@@ -195,8 +195,9 @@ class EightPuzzleGui:
          to go from initial state to goal state."""
         if self.puzzle.is_solvable(self.state):
             #return breadth_first_search(self.puzzle).solution()
-            return best_first_search(self.puzzle, lambda node:node.path_cost).solution()
-            #return depth_first_search(self.puzzle, 20).solution()
+            #return best_first_graph_search(self.puzzle, lambda node:node.path_cost).solution()
+            #return depth_limited_search(self.puzzle, 20).solution()
+            return astar_search(self.puzzle )
         else:
             return "Puzzle non-solvable"
 

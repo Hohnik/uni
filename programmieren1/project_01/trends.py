@@ -215,19 +215,14 @@ def find_centroid(polygon):
     centroid_y = sum( [y for _, y in polygon[:-1]] )/len(polygon[1:])
 
     points_sum = 0
-    # centroid_x_sum = 0
-    # centroid_y_sum = 0
+
 
     for p_n0, p_n1 in zip(polygon, polygon[1:]):
         x_n0, y_n0 = p_n0
         x_n1, y_n1 = p_n1
         points_sum += (x_n0*y_n1 - x_n1*y_n0)
-    #     centroid_x_sum += (x_n0+x_n1)*(x_n0*y_n1 - x_n1*y_n0)
-    #     centroid_y_sum += (y_n0+y_n1)*(x_n0*y_n1 - x_n1*y_n0)
 
     polygon_area = abs(1/2 * points_sum) #TODO points_sum can be 0! State "MD" gives a sum of 0!
-    # centroid_x = 1/(6*polygon_area) * centroid_x_sum if points_sum != 0 else 0
-    # centroid_y = 1/(6*polygon_area) * centroid_y_sum if points_sum != 0 else 0
     return (centroid_x, centroid_y, polygon_area)
 
 def find_center(polygons):
