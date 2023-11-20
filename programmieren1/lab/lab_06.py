@@ -91,6 +91,5 @@ class FreeChecking(Account):
 
         self.balance = self.balance - amount - current_withdrawal_fee
         return self.balance
-    
-
+        
 doctest.testmod()
