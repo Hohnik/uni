@@ -56,19 +56,26 @@ def best_first_graph_search(puzzle, f):
     frontier = PriorityQueue('min', f)
     frontier.append(node)
     reached = dict()
+    # poped_counter = 0 
+    # child_counter = 0 
 
     while not is_empty(frontier):
         node = frontier.pop()
+
+        # print(f"\nNode {poped_counter} cost: ", f(node))
+        # poped_counter += 1
+
         if puzzle.goal_test(node.state):
             return node
         
         for child in node.expand(puzzle):
+            # print(f"Node {child_counter} cost: ", f(child))
+            # child_counter += 1
+
             s = child.state
             if s not in reached or child.path_cost < reached[s].path_cost:
                 reached[s] = child
                 frontier.append(child)
-
-        
 
     return False
 
@@ -77,12 +84,31 @@ def h(node):
     """Default heuristic function h(n) = number of misplaced tiles """
     goal = (1, 2, 3, 4, 5, 6, 7, 8, 0)
     mannhattan_distance = [
-        (0, 1, 2, 1, 2, 3, 2, 3, 4),
-        (1, 0, 1, 2, 1, 2, 3, 2, 3),
-        (2, 1, 0, 3, 2, 1, 4, 3, 2),
+        (4, 3, 2, 3, 2, 1, 2, 1, 0), # 0
+        (0, 1, 2, 1, 2, 3, 2, 3, 4), # 1
+        (1, 0, 1, 2, 1, 2, 3, 2, 3), # 2
+        (2, 1, 0, 3, 2, 1, 4, 3, 2), # 3
+        (1, 2, 3, 0, 1, 2, 1, 2, 3), # 4
+        (2, 1, 2, 1, 0, 1, 2, 1, 2), # 5
+        (3, 2, 1, 2, 1, 0, 3, 2, 1), # 6
+        (2, 3, 4, 1, 2, 3, 0, 1, 2), # 7
+        (3, 2, 3, 2, 1, 2, 1, 0, 1), # 8
         ]
-    one = (0, 1, 2, 1, 2, 3, 2, 3, 4)
-    pass
+
+    h_cost = 0
+    state_cost = []
+    
+    for position, digit in enumerate(node.state):
+       digit_cost = mannhattan_distance[digit][position]
+       state_cost.append(digit_cost)
+       h_cost += digit_cost
+
+    # print("s: ", node.state)
+    # print("c: ", state_cost)
+    # print("h: ", h_cost)
+    # print("g: ", node.path_cost)
+    # print("f: ", h_cost + node.path_cost, "\n")
+    return h_cost
 
 
 def g(node):

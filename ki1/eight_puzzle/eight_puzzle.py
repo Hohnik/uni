@@ -188,7 +188,7 @@ class EightPuzzleGui:
             self.state = self.puzzle.result(self.state, move)
             self.create_buttons()
             self.root.update()
-            self.root.after(0, time.sleep(0.2))
+            self.root.after(0, time.sleep(0.1))
 
     def solve(self):
         """Solves the puzzle using your solution. Needs to return a sequence of actions (as list)
@@ -197,7 +197,7 @@ class EightPuzzleGui:
             #return breadth_first_search(self.puzzle).solution()
             #return best_first_graph_search(self.puzzle, lambda node:node.path_cost).solution()
             #return depth_limited_search(self.puzzle, 20).solution()
-            return astar_search(self.puzzle )
+            return astar_search(self.puzzle).solution()
         else:
             return "Puzzle non-solvable"
 
