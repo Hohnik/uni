@@ -167,10 +167,11 @@ def analyze_tweet_sentiment(tweet):
     for word in tweet_words(tweet):
         if has_sentiment(get_word_sentiment(word)):
             sentiment_sum += get_word_sentiment(word)
+            #sentiment_sum  = sentiment_sum + get_word_sentiment(word)
             counter += 1
 
 
-    return sentiment_sum/counter if counter > 0 else make_sentiment(None)
+    return make_sentiment(sentiment_sum/counter) if counter > 0 else make_sentiment(None)
 
 # Phase 2: The Geometry of Maps
 
@@ -214,9 +215,9 @@ def find_centroid(polygon):
     centroid_x = sum( [x for x, _ in polygon[:-1]] )/len(polygon[1:])
     centroid_y = sum( [y for _, y in polygon[:-1]] )/len(polygon[1:])
 
+
+
     points_sum = 0
-
-
     for p_n0, p_n1 in zip(polygon, polygon[1:]):
         x_n0, y_n0 = p_n0
         x_n1, y_n1 = p_n1
@@ -352,6 +353,7 @@ def average_sentiments(tweets_by_state):
     for name, tweet_list in tweets_by_state.items():
         if len(tweet_list) <= 0:
             continue
+
 
         tweet_sentiment_sum = 0
         for tweet in tweet_list:
