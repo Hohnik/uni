@@ -147,6 +147,30 @@ def find_centroid(polygon):
     """
     "*** YOUR CODE HERE ***"
 
+    area = 0
+    center_x = 0
+    center_y = 0
+
+    for p1, p2 in zip(polygon, polygon[1:]):
+        area += p1[0] * p2[1] - p2[0] * p1[1]
+        center_x += (p1[0] + p2[0]) * (p1[0]*p2[1] - p2[0]* p1[1])
+        center_y += (p1[1] + p2[1]) * (p1[0]*p2[1] - p2[0]* p1[1])
+
+    area = abs(0.5 * area)
+
+    if area == 0:
+        center_x = polygon[0][0]
+        center_y = polygon[0][1]
+        return abs(center_x), abs(center_y), 0
+
+        
+    center_x /= 6*area
+    center_y /= 6*area
+
+    return abs(center_x), abs(center_y), area
+
+
+
 def find_center(polygons):
     """Compute the geographic center of a state, averaged over its polygons.
 

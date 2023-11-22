@@ -89,7 +89,7 @@ def extract_words(text: str):
     
     #return [word for word in re.split(r"[\W\d\s]+", text) if word]
 
-def make_sentiment(value: float|None):
+def make_sentiment(value):
     """Return a sentiment, which represents a value that may not exist.
 
     >>> make_sentiment(0.2)
@@ -121,8 +121,11 @@ def has_sentiment(s):
     >>> has_sentiment(None)
     False
     """
-    return bool(s)
-
+    if s != None:
+        return True
+    else:
+        return False
+    
 def sentiment_value(s):
     """Return the value of a sentiment s."""
     assert has_sentiment(s), 'No sentiment value'
