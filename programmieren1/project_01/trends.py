@@ -384,6 +384,13 @@ def group_tweets_by_hour(tweets):
     tweets -- A list of tweets to be grouped
     """
     tweets_by_hour = {}
+
+    for tweet in tweets: 
+
+        if tweet["time"].hour not in tweets_by_hour:
+            tweets_by_hour[tweet["time"].hour] = []
+            
+        tweets_by_hour[tweet["time"].hour].append(tweet)
     
     return tweets_by_hour
 
