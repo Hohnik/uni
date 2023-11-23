@@ -193,7 +193,23 @@ def find_center(polygons):
     -156.21763
     """
     "*** YOUR CODE HERE ***"
+    if len(polygons) <= 3:
+        return *polygons[0], 0
 
+    centroid_x = sum( [x for x, _ in polygons[:-1]] )/len(polygons[1:])
+    centroid_y = sum( [y for _, y in polygons[:-1]] )/len(polygons[1:])
+
+
+
+    points_sum = 0
+    for p_n0, p_n1 in zip(polygons, polygons[1:]):
+        x_n0, y_n0 = p_n0
+        x_n1, y_n1 = p_n1
+        points_sum += (x_n0*y_n1 - x_n1*y_n0)
+
+    polygon_area = abs(1/2 * points_sum) #TODO points_sum can be 0! State "MD" gives a sum of 0!
+    return (centroid_x, centroid_y, polygon_area)
+    
 
 # Phase 3: The Mood of the Nation
 
