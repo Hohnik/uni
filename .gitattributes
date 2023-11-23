@@ -1,2 +1,1 @@
-full_data.* filter=lfs diff=lfs merge=lfs -text
-proj01.zip filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
