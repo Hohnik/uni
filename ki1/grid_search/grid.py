@@ -1,29 +1,18 @@
-def main():
-    grid = Grid()
-    print(grid.find_player(grid.state))
-
 class Grid(object):
     """
     The game state is a 2D list with 0's.
     The current position is represented by a 1
-    The goal position is represented by a 2
     A wall is represented by a -1
     """
+    def __init__(self, initial):
+        self.initial = initial
+        self.goal = (len(initial[0])-1,len(initial)-1)
 
-
-    def __init__(self, grid_width=10, grid_height=10):
-        self.state = [[0 for _ in range(grid_width)] for _ in range(grid_height)]
-        self.state[0][0] = 1
-        self.state[grid_height-1][grid_width-1] = 2
-        self.goal = (grid_height-1,grid_width-1)
-
-    def __str__(self):
-        string = ""
-        for row in self.state:
-            for elem in row:
-                string += str(elem) + " "
-            string += "\n"
-        return string
+    @staticmethod
+    def create(width=10, height=10):
+        grid = [[0 for _ in range(width)] for _ in range(height)]
+        grid[0][0] = 1
+        return grid
 
     def actions(self, state):
         """ Return the actions that can be executed in the given state.
@@ -47,11 +36,12 @@ class Grid(object):
             
         return possible_actions
     
+
     def result(self, state:list[list], action: str):
         """ Given state and action, return a new state that is the result of the action.
         Action is assumed to be a valid action in the state """
 
-        px, py = self.find_player()
+        px, py = self.find_player(state)
         state[py][px] = 0
 
         match action:
@@ -67,10 +57,9 @@ class Grid(object):
         return state
         
     
-    def goal_test(self):
-        return self.find_player() == self.goal
-
-
+    def goal_test(self, state):
+        return self.find_player(state) == self.goal
+    
 
     @staticmethod
     def find_player(state:list[list]):
@@ -83,21 +72,19 @@ class Grid(object):
         y = player_index // len(state[0])
 
         return x,y
+ 
+
+    def __str__(self):
+        string = ""
+        for row in self.initial:
+            for elem in row:
+                string += str(elem) + " "
+            string += "\n"
+        return string
         
-        # for y, row in enumerate(state):
-        #     for x, elem in enumerate(row):
-        #         if elem == 1:
-        #             return (x, y)
-        
-    @staticmethod
-    def find_goal(state:list[list]):
-        for y, row in enumerate(state):
-            for x, elem in enumerate(row):
-                if elem == 2:
-                    return (x, y)
-
-
-
-
-if __name__ == "__main__": #guard
-    main()
+    # @staticmethod
+    # def find_goal(state:list[list]):
+    #     for y, row in enumerate(state):
+    #         for x, elem in enumerate(row):
+    #             if elem == 2:
+    #                 return (x, y)
