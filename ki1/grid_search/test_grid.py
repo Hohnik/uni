@@ -59,6 +59,10 @@ def test_find_player():
     grid.initial[9][9] = 1
     assert grid.find_player(grid.initial) == (9,9)
 
+    grid.initial[9][9] = 0
+    grid.initial[2][4] = 1
+    assert grid.find_player(grid.initial) == (4,2)
+
 def test_goal_test():
     grid = Grid(Grid.create(3,3))
     state = grid.initial

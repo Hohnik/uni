@@ -63,13 +63,15 @@ class Grid(object):
 
     @staticmethod
     def find_player(state:list[list]):
-        full_grid = []
-        for row in state: 
-            full_grid += row
+        x, y = 0,0
 
-        player_index = full_grid.index(1)
-        x = player_index % len(state[0])
-        y = player_index // len(state[0])
+        for j, row in enumerate(state): 
+            if 1 not in row:
+                continue
+            for i, elem in enumerate(row):
+                if elem == 1:
+                    x = i
+                    y = j
 
         return x,y
  
@@ -81,10 +83,3 @@ class Grid(object):
                 string += str(elem) + " "
             string += "\n"
         return string
-        
-    # @staticmethod
-    # def find_goal(state:list[list]):
-    #     for y, row in enumerate(state):
-    #         for x, elem in enumerate(row):
-    #             if elem == 2:
-    #                 return (x, y)
