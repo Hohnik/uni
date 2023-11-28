@@ -1,5 +1,9 @@
+from functools import partial
+from tkinter import Button, Tk
+
+
 class Puzzle(object):
-    def __init__(self, initial, goal):
+    def __init__(self, initial, goal = [1 if x == 99 else 0 for x in range(10*10)]):
         self.initial = initial
         self.goal = goal 
 
@@ -43,9 +47,42 @@ class Puzzle(object):
 class PuzzleGui(object):
     def __init__(self):
         self.root = Tk()
-        self.state = [0 for x in range(10*10)]
-        self.puzzle = EightPuzzle(tuple(self.state))
+        self.state = [1 if x == 0 else 0 for x in range(10*10)]
+        self.puzzle = Puzzle(self.state)
         self.solution = None
-        self.b: List[Any] = [None] * 9
+        self.buttons = [None] * (10*10)
         self.init_gui()
         self.root.mainloop()
+
+    def init_gui(self):
+        self.create_buttons()
+        self.create_static_buttons()
+
+    def create_buttons(self):
+        for i, _ in enumerate(self.buttons):
+            self.buttons[i] = Button(self.root,
+                                     text=f'P' if self.state[i] == 1 else None, 
+                                     width=2,
+                                     height=1,
+                                     fg="cornflowerblue",
+                                     bg="gray20",
+                                     font=('Helvetica', 40, 'bold'),
+                                     command=lambda: print("Hi!"))
+            self.buttons[i].grid(row=i//10, column=i%10, ipady=10)
+            print(f"Created Button {i}")
+
+    def create_static_buttons(self):
+        solve_btn = Button(self.root, text='Solve', font=('Helvetica', 30, 'bold'), width=8,
+                           command=partial(self.solve_steps))
+        solve_btn.grid(row=10, column=3, ipady=10, columnspan=4)
+
+    def solve_steps(self):
+        pass
+    
+    def exchange(self, index):
+        pass
+
+
+
+if __name__ == "__main__":
+    PuzzleGui()
