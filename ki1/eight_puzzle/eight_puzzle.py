@@ -168,13 +168,13 @@ class EightPuzzleGui:
 
         if current_action in actions:
             self.b[zero_ix].grid_forget()
-            self.b[zero_ix] = Button(self.root, text=f'{self.state[index]}', width=6, font=('Helvetica', 40, 'bold'),
-                                     command=partial(self.exchange, zero_ix))
+            self.b[zero_ix] = Button(self.root, text=f'{self.state[index]}', width=6, font=('Helvetica', 40, 'bold'), command=partial(self.exchange, zero_ix))
             self.b[zero_ix].grid(row=zero_ix // 3, column=zero_ix % 3, ipady=40)
+
             self.b[index].grid_forget()
-            self.b[index] = Button(self.root, text=None, width=6, font=('Helvetica', 40, 'bold'),
-                                   command=partial(self.exchange, index))
+            self.b[index] = Button(self.root, text=None, width=6, font=('Helvetica', 40, 'bold'), command=partial(self.exchange, index))
             self.b[index].grid(row=index // 3, column=index % 3, ipady=40)
+            
             self.state[zero_ix], self.state[index] = self.state[index], self.state[zero_ix]
             self.puzzle = EightPuzzle(tuple(self.state))
 

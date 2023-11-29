@@ -12,7 +12,6 @@ def breadth_first_search(puzzle):
     
     while not is_empty(frontier):
         node = frontier.popleft()
-        print(node)
         # if counter > 10_000:
         #     return False
         
@@ -102,11 +101,23 @@ def h(node):
        
     return h_cost
 
+def h_puzzle(node:Node):
+    state = node.state
+    player_index = state.index(1)
+    goal_index = 99 # fixed value, bc. I don't know how to get the puzzle.goal from a node
+    goal_x, goal_y = goal_index % 10,  goal_index // 10
+    player_x, player_y = player_index % 10,  player_index // 10
+
+    return (goal_x - player_x) + (goal_y - player_y)
+
+
+    
+
 def g(node):
     return node.path_cost
 
 def f(node):
-    return g(node) + h(node)
+    return g(node) + h_puzzle(node)
 
 def astar_search(puzzle):
     """A* search is best-first graph search with f(n) = g(n)+h(n).
