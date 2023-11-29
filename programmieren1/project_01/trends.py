@@ -384,6 +384,13 @@ def group_tweets_by_hour(tweets):
     tweets -- A list of tweets to be grouped
     """
     tweets_by_hour = {}
+
+    for tweet in tweets: 
+
+        if tweet["time"].hour not in tweets_by_hour:
+            tweets_by_hour[tweet["time"].hour] = []
+
+        tweets_by_hour[tweet["time"].hour].append(tweet)
     
     return tweets_by_hour
 
@@ -442,7 +449,7 @@ def draw_map_for_term(term='my job'):
             draw_dot(tweet_location(tweet), sentiment_value(s))
     wait()
 
-def draw_map_by_hour(term='my job', pause=0.5):
+def draw_map_by_hour(term='my job', pause=0.2):
     """Draw the sentiment map for tweets that match term, for each hour."""
     tweets = load_tweets(make_tweet, term)
     tweets_by_hour = group_tweets_by_hour(tweets)

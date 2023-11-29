@@ -194,6 +194,8 @@ class EightPuzzleGui:
         """Solves the puzzle using your solution. Needs to return a sequence of actions (as list)
          to go from initial state to goal state."""
         if self.puzzle.is_solvable(self.state):
+            #* the search algorithms return a Node object.
+            #* The Node object holds a list of the taken actions.
             #return breadth_first_search(self.puzzle).solution()
             #return best_first_graph_search(self.puzzle, lambda node:node.path_cost).solution()
             #return depth_limited_search(self.puzzle, 20).solution()
