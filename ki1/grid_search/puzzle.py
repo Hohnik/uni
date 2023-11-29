@@ -4,9 +4,22 @@ from tkinter import Button, Tk
 
 from search import astar_search, breadth_first_search, best_first_graph_search, depth_limited_search
 
+initial_state =(
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0,-1,-1,-1,-1,-1, 0, 0, 0, 
+    0,-1, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0,-1, 1, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+)
+initial_goal = 33
 
 class Puzzle(object):
-    def __init__(self, initial, goal= 55 ): # numbers over 91 take over 10 sec
+    def __init__(self, initial, goal= 99 ): # numbers over 91 take over 10 sec
         self.initial = initial
         self.goal = goal 
         self.generate_wall()
@@ -54,12 +67,11 @@ class Puzzle(object):
     def find_current_position(state):
         return state.index(1)
 
-    
 class PuzzleGui(object):
     def __init__(self):
         self.root = Tk()
-        self.state = tuple([1 if x == 0 else 0 for x in range(10*10)])
-        self.puzzle = Puzzle(self.state)
+        self.state = initial_state#tuple([1 if x == 0 else 0 for x in range(10*10)])
+        self.puzzle = Puzzle(initial_state, initial_goal)#Puzzle(self.state)
         self.solution = None
         self.buttons: list[Button] = [None] * (10*10)
         self.init_gui()
@@ -150,10 +162,10 @@ class PuzzleGui(object):
     def solve(self):
         #* the search algorithms return a Node object.
         #* The Node object holds a list of the taken actions.
-        #return breadth_first_search(self.puzzle).solution()
+        return breadth_first_search(self.puzzle).solution()
         #return best_first_graph_search(self.puzzle, lambda node:node.path_cost).solution()
         #return depth_limited_search(self.puzzle, 20).solution()
-        return astar_search(self.puzzle).solution()
+        #return astar_search(self.puzzle).solution()
 
 
 

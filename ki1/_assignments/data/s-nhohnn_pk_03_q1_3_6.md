@@ -14,7 +14,7 @@
 
 ### 3. *Uniform-Cost-Search* == *A\*-Search*? 
 
-How I understood it, Uniform-Cost-Search (cheapest-cost-search) is just a special case of the A*-Search that has a easy heuristic, that sorts the frontier just based on the cheapest path cost.
+How I understood it, Uniform-Cost-Search (cheapest-cost-search) is just a special case of the A\*-Search that has a easy heuristic, that sorts the frontier just based on the cheapest path cost. If we set the h() of the A\* search to a fixed number like 1, we get an uninformed Uniform-Cost-Search algorithm.
 
 
 
