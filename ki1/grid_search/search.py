@@ -104,7 +104,7 @@ def h(node):
 def h_puzzle(node:Node):
     state = node.state
     player_index = state.index(1)
-    goal_index = 99 # fixed value, bc. I don't know how to get the puzzle.goal from a node
+    goal_index = 99 # todo: hardcoded
     goal_x, goal_y = goal_index % 10,  goal_index // 10
     player_x, player_y = player_index % 10,  player_index // 10
 
