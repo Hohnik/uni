@@ -23,6 +23,8 @@ class Point:
         vert = other.y - self.y
         horiz = other.x - self.x
         return math.atan2(vert, horiz)
+    def __repr__(self) -> str:
+        return f"({self.x}|{self.y})"
     
 class Triangle:
     def __init__(self, p1:Point, p2:Point, p3:Point):
@@ -121,3 +123,29 @@ def test_triangle_angle_classification():
     assert obtuse.angle_classification() == "obtuse"
     assert acute.angle_classification() == "acute"
     #assert obtuse.angle_classification() == "isosceles"
+
+
+a = Point(1,1)
+b = Point(4,1)
+c = Point(1,4)
+points = [a,b,c]
+
+for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
+    print(p1,p2,p3)
+    
+    point1 = Point(p1.x - p3.x, p1.y - p3.y)
+    point2 = Point(p2.x - p3.x, p2.y - p3.y)
+
+    print(point1,point2,p3)
+
+    angle = p1.angle_between(p2)
+    angle_deg = (math.degrees(angle) + 360) % 360
+    print(angle_deg)
+
+# for i, point in enumerate(points):
+#     p1 = Point(points[i].x - points[(i+2)%3].x,points[i].y - points[(i+2)%3].y)
+#     p2 = Point(points[(i+1)%3].x - points[(i+2)%3].x,points[(i+1)%3].y - points[(i+2)%3].y)
+
+#     angle = p1.angle_between(p2)
+#     angle_deg = (math.degrees(angle) + 360) % 360
+#     print(angle_deg)
