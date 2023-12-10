@@ -23,6 +23,10 @@ class Point:
         vert = other.y - self.y
         horiz = other.x - self.x
         return math.atan2(vert, horiz)
+    
+    def dot_product(self, other):
+        return self.x*other.x + self.y*other.y
+
     def __repr__(self) -> str:
         return f"({self.x}|{self.y})"
     
@@ -130,21 +134,53 @@ b = Point(4,1)
 c = Point(1,4)
 points = [a,b,c]
 
+alpha = 0
+bata = 0
+gamma = 0
+angles = []
+
 for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
-    print(p1,p2,p3)
-    
-    point1 = Point(p1.x - p3.x, p1.y - p3.y)
-    point2 = Point(p2.x - p3.x, p2.y - p3.y)
+    vector_p1_p2 = Point(p2.x -p1.x, p2.y - p1.y)
+    vector_p1_p3 = Point(p3.x -p1.x, p3.y - p1.y)
 
-    print(point1,point2,p3)
+    dot_product = vector_p1_p2.dot_product(vector_p1_p3)
 
-    angle = p1.angle_between(p2)
-    angle_deg = (math.degrees(angle) + 360) % 360
-    print(angle_deg)
+    mag_v_p1_p2 = vector_p1_p2.distance_to_origin()
+    mag_v_p1_p3 = vector_p1_p3.distance_to_origin()
+    mag_product = mag_v_p1_p2*mag_v_p1_p3
 
-# for i, point in enumerate(points):
-#     p1 = Point(points[i].x - points[(i+2)%3].x,points[i].y - points[(i+2)%3].y)
-#     p2 = Point(points[(i+1)%3].x - points[(i+2)%3].x,points[(i+1)%3].y - points[(i+2)%3].y)
+    print(vector_p1_p2, vector_p1_p3)
+    print(dot_product)
+    print(mag_product)
+
+# for i, _ in enumerate(points):
+#     angles.append(points[i].angle_between(points[(i+1)%3]))
+
+# angles_deg = list(map(lambda x: x*180/math.pi,angles))
+
+# for i, _ in enumerate(angles_deg):
+#     print(angles_deg[i] - angles_deg[(i+1)%3])
+
+# print(angles_deg)
+
+# for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
+#     print(p1,p2,p3)
+
+#     point1 = Point(p1.x - p3.x, p1.y - p3.y)
+#     point2 = Point(p2.x - p3.x, p2.y - p3.y)
+
+#     print(point1,point2,p3)
+
+#     angle = p1.angle_between(p2)
+#     angle_deg = (math.degrees(angle) + 360) % 360
+#     print(angle_deg)
+
+
+# for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
+#     print(p1,p2)
+
+#     point1 = Point(p1.x, p1.y)
+#     point2 = Point(p2.x, p2.y)
 
 #     angle = p1.angle_between(p2)
 #     angle_deg = (math.degrees(angle) + 360) % 360
