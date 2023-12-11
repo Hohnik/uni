@@ -35,19 +35,37 @@ class Triangle:
         self.p1 = p1
         self.p2 = p2
         self.p3 = p3
+        self.right = True if self.angle_classification() == "right" else False
 
     def side_lengths(self) -> tuple[float]:
         d1 = self.p1.euclidean_distance(self.p2)
         d2 = self.p2.euclidean_distance(self.p3)
         d3 = self.p3.euclidean_distance(self.p1)
         return float(d1), float(d2), float(d3)
-    
+
     def angles(self):
-        a1 = self.p1.angle_between(self.p2)
-        a2 = self.p2.angle_between(self.p3)
-        a3 = self.p3.angle_between(self.p1)
-        return float(a1), float(a2), float(a3)
+        points = [self.p1,self.p2,self.p3]
+
+        angles_lst = []
+
+        for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
+            vector_p1_p2 = Point(p2.x -p1.x, p2.y - p1.y)
+            vector_p1_p3 = Point(p3.x -p1.x, p3.y - p1.y)
+
+            dot_product = vector_p1_p2.dot_product(vector_p1_p3)
+
+            mag_v_p1_p2 = vector_p1_p2.distance_to_origin()
+            mag_v_p1_p3 = vector_p1_p3.distance_to_origin()
+            magnitude_product = mag_v_p1_p2*mag_v_p1_p3
+
+            cos = dot_product / magnitude_product
+            acos = math.acos(cos)
+            angles_lst.append(math.degrees(acos))
+
+        return tuple(angles_lst)
     
+
+
     def side_classification(self) -> str:
 
         equal_sides = 0
@@ -66,14 +84,10 @@ class Triangle:
                 return "isosceles"
 
     def angle_classification(self) -> str:
-
         angles_60 = 0
 
         for angle in self.angles():
-            print(abs(math.degrees(angle)))
-
-        for angle in self.angles():
-            angle = abs(math.degrees(angle))
+            angle = abs(angle)
 
             if equal(angle, 90):
                 return "right"
@@ -87,6 +101,9 @@ class Triangle:
             return "equiangular"
 
         return "acute"
+    
+    def is_right(self):
+        return self.right
 
 
 
@@ -97,15 +114,6 @@ def test_triangle_side_lengths():
     assert d1 == float(3)
     assert d2 == float(4)
     assert d3 == float(5)
-
-
-# def test_triangle_angles():
-#     triangle = Triangle(Point(10,1), Point(0,0), Point(3,2)) 
-#     a1, a2, a3 = triangle.angles()
-
-#     assert a1 >= 0
-#     assert a2 >= 0
-#     assert a3 >= 0
 
 
 def test_triangle_side_classification():
@@ -127,61 +135,3 @@ def test_triangle_angle_classification():
     assert obtuse.angle_classification() == "obtuse"
     assert acute.angle_classification() == "acute"
     #assert obtuse.angle_classification() == "isosceles"
-
-
-a = Point(1,1)
-b = Point(4,1)
-c = Point(1,4)
-points = [a,b,c]
-
-alpha = 0
-bata = 0
-gamma = 0
-angles = []
-
-for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
-    vector_p1_p2 = Point(p2.x -p1.x, p2.y - p1.y)
-    vector_p1_p3 = Point(p3.x -p1.x, p3.y - p1.y)
-
-    dot_product = vector_p1_p2.dot_product(vector_p1_p3)
-
-    mag_v_p1_p2 = vector_p1_p2.distance_to_origin()
-    mag_v_p1_p3 = vector_p1_p3.distance_to_origin()
-    mag_product = mag_v_p1_p2*mag_v_p1_p3
-
-    print(vector_p1_p2, vector_p1_p3)
-    print(dot_product)
-    print(mag_product)
-
-# for i, _ in enumerate(points):
-#     angles.append(points[i].angle_between(points[(i+1)%3]))
-
-# angles_deg = list(map(lambda x: x*180/math.pi,angles))
-
-# for i, _ in enumerate(angles_deg):
-#     print(angles_deg[i] - angles_deg[(i+1)%3])
-
-# print(angles_deg)
-
-# for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
-#     print(p1,p2,p3)
-
-#     point1 = Point(p1.x - p3.x, p1.y - p3.y)
-#     point2 = Point(p2.x - p3.x, p2.y - p3.y)
-
-#     print(point1,point2,p3)
-
-#     angle = p1.angle_between(p2)
-#     angle_deg = (math.degrees(angle) + 360) % 360
-#     print(angle_deg)
-
-
-# for p1,p2,p3 in zip(points, (points+points)[1:], (points+points)[2:]):
-#     print(p1,p2)
-
-#     point1 = Point(p1.x, p1.y)
-#     point2 = Point(p2.x, p2.y)
-
-#     angle = p1.angle_between(p2)
-#     angle_deg = (math.degrees(angle) + 360) % 360
-#     print(angle_deg)
