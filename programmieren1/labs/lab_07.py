@@ -270,3 +270,32 @@ def test_triangle_perimiter():
     t = Triangle(Point(0,0), Point(0,3), Point(3,0))
     a,b,c = t.side_lengths()
     assert equal(t.perimeter(), a+b+c)
+
+
+"""
+compute without a computer:
+
+"A cool gray car"
+
+"A cool gray car"
+
+"gray"
+
+"gray"
+
+"A cool gray car"
+
+"A cool plaid car"
+
+"plaid"
+
+"gray"
+
+"small"
+
+AttributeError "Car has not attribute size"
+
+"small"
+
+AttributeError "Object has not attribute size"
+"""
