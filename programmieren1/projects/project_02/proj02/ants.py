@@ -194,30 +194,45 @@ class ThrowerAnt(Ant):
         """
 
         # BEGIN Problem 3 and 4
-        def is_hive():
-            return place.is_hive
 
-        def has_bees(bees):
-            return bool(bees)
+        current_place = self.place
+        range_counter = 0
+        while current_place.bees == []:
+            current_place = current_place.entrance
+            range_counter += 1
+        if current_place.is_hive == True:
+            return None
+        elif self.max_range:
+            return random_bee(current_place.bees) if range_counter <= self.max_range else None
+        elif self.min_range:
+            return random_bee(current_place.bees) if range_counter >= self.min_range else None
+        else:
+            return random_bee(current_place.bees)
 
-        place = self.place
-        place_counter = 0
-        bees = []
+        # def is_hive():
+        #     return place.is_hive
 
-        while not is_hive():
-            bees.append(place.bees)
-            place = place.entrance
+        # def has_bees(bees):
+        #     return bool(bees)
 
-        if self.max_range:
-            bees = bees[: self.max_range + 1]
-        if self.min_range:
-            bees = bees[self.min_range :]
+        # place = self.place
+        # place_counter = 0
+        # bees = []
 
-        for bee_group in bees:
-            if has_bees(bee_group):
-                return random_bee(bee_group)
+        # while not is_hive():
+        #     bees.append(place.bees)
+        #     place = place.entrance
 
-        return None
+        # if self.max_range:
+        #     bees = bees[: self.max_range + 1]
+        # if self.min_range:
+        #     bees = bees[self.min_range :]
+
+        # for bee_group in bees:
+        #     if has_bees(bee_group):
+        #         return random_bee(bee_group)
+
+        # return None
 
         # END Problem 3 and 4
 

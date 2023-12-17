@@ -144,13 +144,14 @@ def filter_iter(iterable, f):
     4
     """
     # Your code here.
-    while iterable:
-        elem = next(iterable)
-        if f(elem):
-            yield elem
-        
-
-
+    iterable = iter(iterable)
+    while True:
+        try:
+            elem = next(iterable)
+            if f(elem):
+                yield elem
+        except:
+            return None
 
 def differences(it):
     """
@@ -163,34 +164,61 @@ def differences(it):
     """
     # Your code here.
 
+    it = iter(it)
+
+    elem = None
+    elem2 = next(it)
+
+    while True:
+        try:
+            elem = elem2
+            elem2 = next(iter(it))
+            yield elem2-elem
+        except:
+            return
+
+
 
 #* Compute without a computer
+def compute():
+    """
+    >>> def infinite_generator(n):
+    ...    yield n
+    ...    while True:
+    ...        n += 1
+    ...        yield n
+    >>> gen_obj = infinite_generator(1)
+    >>> next(gen_obj)
+    1
+    >>> next(gen_obj)
+    2
+    >>> def rev_str(s):
+    ...     for i in range(len(s)):
+    ...         yield from s[i::-1]
+    >>> hey = rev_str("hey")
+    >>> next(hey)
+    'h'
+    >>> next(hey)
+    'e'
+    >>> next(hey)
+    'h'
+    >>> list(hey)
+    ['y', 'e', 'h']
+    >>> def add_prefix(s, pre):
+    ...     if not pre:
+    ...         return
+    ...     yield pre[0] + s
+    ...     yield from add_prefix(s, pre[1:])
+    >>> school = add_prefix("schooler", ["pre", "middle", "high"])
+    >>> next(school)
+    'preschooler'
+    >>> list(map(lambda x: x[:-2], school))
+    ['middleschool', 'highschool']
+    """
 
 """
->>> def infinite_generator(n):
-...    yield n
-...    while True:
-...        n += 1
-...        yield n    
 >>> next(infinite_generator)
->>> gen_obj = infinite_generator(1)
->>> next(gen_obj)
->>> next(gen_obj)
+TypeError
 >>> list(gen_obj)
->>> def rev_str(s):
-...     for i in range(len(s)):
-...         yield from s[i::-1]
->>> hey = rev_str("hey")
->>> next(hey)
->>> next(hey)
->>> next(hey)
->>> list(hey)
->>> def add_prefix(s, pre):
-...     if not pre:
-...         return
-...     yield pre[0] + s
-...     yield from add_prefix(s, pre[1:])
->>> school = add_prefix("schooler", ["pre", "middle", "high"])
->>> next(school)
->>> list(map(lambda x: x[:-2], school))
+MemoryError
 """
