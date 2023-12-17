@@ -60,7 +60,7 @@ class Insect:
     def __init__(self, health, place=None):
         """Create an Insect with a health amount and a starting PLACE."""
         self.health = health
-        self.place = place  # set by Place.add_insect and Place.remove_insect
+        self.place: Place = place  # set by Place.add_insect and Place.remove_insect
 
     def reduce_health(self, amount):
         """Reduce health by AMOUNT, and remove the insect from its place if it
@@ -183,8 +183,8 @@ class ThrowerAnt(Ant):
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
-    max_range = None
-    min_range = None
+    min_range = 0
+    max_range = float("inf")
 
     def nearest_bee(self):
         """Return the nearest Bee in a Place that is not the HIVE, connected to
@@ -194,45 +194,17 @@ class ThrowerAnt(Ant):
         """
 
         # BEGIN Problem 3 and 4
+        place_holder = self.place
+        place_counter = 0
 
-        current_place = self.place
-        range_counter = 0
-        while current_place.bees == []:
-            current_place = current_place.entrance
-            range_counter += 1
-        if current_place.is_hive == True:
-            return None
-        elif self.max_range:
-            return random_bee(current_place.bees) if range_counter <= self.max_range else None
-        elif self.min_range:
-            return random_bee(current_place.bees) if range_counter >= self.min_range else None
-        else:
-            return random_bee(current_place.bees)
+        while place_counter < self.min_range or not random_bee(place_holder.bees):
+            place_holder = place_holder.entrance
+            place_counter += 1
 
-        # def is_hive():
-        #     return place.is_hive
-
-        # def has_bees(bees):
-        #     return bool(bees)
-
-        # place = self.place
-        # place_counter = 0
-        # bees = []
-
-        # while not is_hive():
-        #     bees.append(place.bees)
-        #     place = place.entrance
-
-        # if self.max_range:
-        #     bees = bees[: self.max_range + 1]
-        # if self.min_range:
-        #     bees = bees[self.min_range :]
-
-        # for bee_group in bees:
-        #     if has_bees(bee_group):
-        #         return random_bee(bee_group)
-
-        # return None
+            if not place_holder or place_holder.is_hive or place_counter > self.max_range:
+                return None
+        
+        return random_bee(place_holder.bees)
 
         # END Problem 3 and 4
 
@@ -268,6 +240,7 @@ class ShortThrower(ThrowerAnt):
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 4
     implemented = True  # Change to True to view in the GUI
+    min_range = 0
     max_range = 3
     # END Problem 4
 
@@ -281,6 +254,7 @@ class LongThrower(ThrowerAnt):
     # BEGIN Problem 4
     implemented = True  # Change to True to view in the GUI
     min_range = 5
+    max_range = float("inf")
     # END Problem 4
 
 
