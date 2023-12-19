@@ -290,7 +290,7 @@ class FireAnt(Ant):
         if is_dying():
             amount += self.damage
 
-        for bee in self.place.bees[::]:
+        for bee in self.place.bees[:]:
             bee.reduce_health(amount)
 
         super().reduce_health(self.health if is_dying() else amount)
