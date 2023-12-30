@@ -1,3 +1,6 @@
+import time
+import random
+
 def intersect(L1, L2):
     """
     Returns a list with all different elements of both lists.
@@ -181,3 +184,31 @@ def merge(left, right):
 def test_merge_sort():
     lst = [2, 4, 1, 3, 6, 7, 5]
     assert merge_sort(lst) == [1, 2, 3, 4, 5, 6, 7]
+
+
+def time_sorts(algos, size):
+    results = {"algorithm": [], "time": []}
+    for f in algos:
+        results["algorithm"].append(f.__name__)
+        lst = [i for i in range(size)]
+        random.shuffle(lst)
+        start = time.time()
+        f(lst)
+        stop = time.time()
+        results["time"].append(stop - start)
+    return results
+
+def time_printer_string(n):
+    result = ""
+    algorithms = [quick_sort]
+    time_table = time_sorts(algorithms, n)
+    for algo, runtime in zip(time_table["algorithm"], time_table["time"]):
+        result += f"{algo}: \t{runtime:.5}\n"
+
+    return result
+
+
+runs = [100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000]
+for n in runs:
+    print(n, time_printer_string(n), sep="\n")
+    print()
