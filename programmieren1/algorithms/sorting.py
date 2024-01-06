@@ -1,14 +1,5 @@
-import pytest
 import random
-
-
-"""
-Attribute von Sortieralgoritmen
-    Rekursiv
-    Returned kopie der Liste
-    Laufzeitkomplexität
-    Speicherkomplexität
-"""
+import pytest
 
 def bubble_sort(lst: list):
     swapped = True
@@ -81,30 +72,32 @@ def merge_sort(lst: list):  # O(n * log(n)) https://upload.wikimedia.org/wikiped
     return merge(left, right)
 
 def merge(left, right):
-    sortedList = []
+    sorted_list = []
 
     while len(left) != 0 and len(right) != 0:
         if left[0] < right[0]:
-            sortedList.append(left[0])
+            sorted_list.append(left[0])
             left.pop(0)
         else:
-            sortedList.append(right[0])
+            sorted_list.append(right[0])
             right.pop(0)
 
     while len(left) != 0:
-        sortedList.append(left[0])
+        sorted_list.append(left[0])
         left.pop(0)
 
     while len(right) != 0:
-        sortedList.append(right[0])
+        sorted_list.append(right[0])
         right.pop(0)
 
-    return sortedList
+    return sorted_list
 
 
 funcs = [bubble_sort, selection_sort, insertion_sort, quick_sort, merge_sort]
 @pytest.mark.parametrize("f", [funcs[i % len(funcs)] for i in range(5)])
 def test_sorts(f):
-    lst = [i for i in range(1000)]
+    lst = list(range(1000)
     random.shuffle(lst)
-    assert f(lst) == [i for i in range(1000)]
+    assert f(lst) == list(range(1000)
+
+
