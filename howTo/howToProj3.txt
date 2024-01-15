@@ -1,0 +1,5 @@
+conda create -n proj3
+conda uninstall python
+conda install python=3.9
+pip install kivy introcs
+python invaders
