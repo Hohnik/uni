@@ -8,13 +8,12 @@ read the documentation on how to use the provided objects.
 Author: Walker M. White (wmw2)
 Date:   August 1, 2017 (Python 3 version)
 """
+from introcs.geom import Point2
 # Basic Kivy Modules
 from kivy.graphics import *
 from kivy.graphics.instructions import *
-from kivy.uix.floatlayout import FloatLayout
 from kivy.metrics import dp
-
-from introcs.geom import Point2
+from kivy.uix.floatlayout import FloatLayout
 
 
 class GInput(object):
@@ -45,8 +44,8 @@ class GInput(object):
         return self._touch_enabled
 
     @touch_enabled.setter
-    def touch_enabled(self,value):
-        assert type(value) == bool, 'value %s is not a bool' % repr(value)
+    def touch_enabled(self, value):
+        assert type(value) == bool, "value %s is not a bool" % repr(value)
         if value and not self._touch_enabled:
             self._enable_touch()
         elif not value and self._touch_enabled:
@@ -66,14 +65,13 @@ class GInput(object):
         return self._keyboard_enabled
 
     @keyboard_enabled.setter
-    def keyboard_enabled(self,value):
-        assert type(value) == bool, 'value %s is not a bool' % repr(value)
+    def keyboard_enabled(self, value):
+        assert type(value) == bool, "value %s is not a bool" % repr(value)
         if value and not self._keyboard_enabled:
             self._enable_keyboard()
         elif not value and self._keyboard_enabled:
             self._disable_keyboard()
         self._keyboard_enabled = value
-
 
     # IMMUTABLE ATTRIBUTES
     @property
@@ -95,7 +93,7 @@ class GInput(object):
         if self._touch is None:
             return None
 
-        return Point2(self._touch.x/dp(1),self._touch.y/dp(1))
+        return Point2(self._touch.x / dp(1), self._touch.y / dp(1))
 
     @property
     def key_count(self):
@@ -122,8 +120,7 @@ class GInput(object):
 
         **Invariant**: Must be a list of strings (possibly empty)
         """
-        return tuple(k for (k,v) in self._keystate.items() if v)
-
+        return tuple(k for (k, v) in self._keystate.items() if v)
 
     # BUILT-IN METHODS
     def __init__(self):
@@ -135,7 +132,7 @@ class GInput(object):
         methods.  You should only use  use the object provided in the ``input`` attribute
         of :class:`GameApp`. See the documentation of that class for more information.
         """
-        self._view  = None
+        self._view = None
         self._touch = None
         self._keyboard = None
 
@@ -146,13 +143,12 @@ class GInput(object):
         self._keypress = {}
         self._keyrelease = {}
         self._keycount = 0
-        
+
         self._touchpress = 0
         self._touchrelease = 0
 
-
     # PUBLIC METHODS
-    def is_key_down(self,key):
+    def is_key_down(self, key):
         """
         Checks whether the key is currently held down.
 
@@ -180,11 +176,11 @@ class GInput(object):
         :return: True if ``key`` is currently held down
         :rtype:  ``bool``
         """
-        if key != '':
+        if key != "":
             return key in self._keystate and self._keystate[key]
         return self._keycount > 0
 
-    def is_key_pressed(self,key):
+    def is_key_pressed(self, key):
         """
         Returns whether the key was just pressed.
 
@@ -212,11 +208,11 @@ class GInput(object):
         :return: True if ``key`` is currently held down
         :rtype:  ``bool``
         """
-        if key != '':
+        if key != "":
             return key in self._keypress
         return len(self._keypress) > 0
 
-    def is_key_released(self,key):
+    def is_key_released(self, key):
         """
         Returns whether the key was just released.
 
@@ -244,7 +240,7 @@ class GInput(object):
         :return: True if ``key`` is currently held down
         :rtype:  ``bool``
         """
-        if key != '':
+        if key != "":
             return key in self._keyrelease
         return len(self._keyrelease) > 0
 
@@ -264,7 +260,7 @@ class GInput(object):
         """
         Returns whether the mouse is was just pressed.
 
-        The difference between a touch and a press is that a press means that the 
+        The difference between a touch and a press is that a press means that the
         mouse is down this animation frame, but was not down the previous animation
         frame.
 
@@ -290,12 +286,11 @@ class GInput(object):
         """
         return self._touchrelease > 0
 
-
     # HIDDEN METHODS
     def _prestep(self):
         """
-        The step to perform before the update step.  
-        
+        The step to perform before the update step.
+
         This method 'dirties' the inputs so we know what presses and releases are read.
         """
         for k in self._keypress:
@@ -309,26 +304,26 @@ class GInput(object):
 
     def _poststep(self):
         """
-        The step to perform after the update step.  
-        
+        The step to perform after the update step.
+
         This method deletes any read presses and releases.
         """
         keylist = list(self._keypress.keys())
         for k in keylist:
             if not self._keypress[k]:
                 del self._keypress[k]
-        
+
         keylist = list(self._keyrelease.keys())
         for k in keylist:
             if not self._keyrelease[k]:
                 del self._keyrelease[k]
-        
+
         if self._touchpress == 1:
             self._touchpress = 0
         if self._touchrelease == 1:
             self._touchrelease = 0
 
-    def _register(self,view):
+    def _register(self, view):
         """
         Registers the view with this input handler; activating it.
 
@@ -372,7 +367,10 @@ class GInput(object):
         if self._view is None:
             return
         from kivy.core.window import Window
-        self._keyboard = Window.request_keyboard(self._disable_keyboard, self._view, 'text')
+
+        self._keyboard = Window.request_keyboard(
+            self._disable_keyboard, self._view, "text"
+        )
         self._keyboard.bind(on_key_down=self._capture_key)
         self._keyboard.bind(on_key_up=self._release_key)
 
@@ -427,7 +425,7 @@ class GInput(object):
         self._keycount -= 1
         return True
 
-    def _capture_touch(self,view,touch):
+    def _capture_touch(self, view, touch):
         """
         Captures the current mouse position if button is pressed.
 
@@ -440,10 +438,10 @@ class GInput(object):
         if not self._touch:
             self._touchpress = 2
         self._touch = touch
-        
-        #self._touch.grab(self)
 
-    def _release_touch(self,view,touch):
+        # self._touch.grab(self)
+
+    def _release_touch(self, view, touch):
         """
         Releases a the current mouse position from memory.
 
@@ -490,9 +488,8 @@ class GView(FloatLayout):
         self._reset()
         self._contents = set()
 
-
     # PUBLIC METHODS
-    def draw(self,cmd):
+    def draw(self, cmd):
         """
         Draws the given Kivy graphics command to this view.
 
@@ -517,13 +514,13 @@ class GView(FloatLayout):
         self._contents.clear()
 
     # HIDDEN METHODS
-    def _reset(self,obj=None,value=None):
+    def _reset(self, obj=None, value=None):
         """
         Resets the view canvas in response to a resizing event
         """
         self.canvas.clear()
-        self.canvas.add(Color(1,1,1))
-        self.canvas.add(Rectangle(pos=self.pos,size=self.size))
+        self.canvas.add(Color(1, 1, 1))
+        self.canvas.add(Rectangle(pos=self.pos, size=self.size))
         # Work-around for Retina Macs
-        self.canvas.add(Scale(dp(1),dp(1),dp(1)))
+        self.canvas.add(Scale(dp(1), dp(1), dp(1)))
         self.canvas.add(self._frame)

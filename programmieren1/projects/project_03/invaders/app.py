@@ -10,10 +10,9 @@ question on Piazza.
 # YOUR NAME(S) AND NETID(S) HERE
 # DATE COMPLETED HERE
 """
-from wave import *
-
 from consts import *
 from game2d import *
+from wave_f import *
 
 # PRIMARY RULE: Invaders can only access attributes in wave.py via getters/setters
 # Invaders is NOT allowed to access anything in models.py
@@ -76,7 +75,6 @@ class Invaders(GameApp):
     _state = STATE_INACTIVE
     _text = None
     _wave = None
-    counter = 0
 
     # THREE MAIN GAMEAPP METHODS
     def start(self):
@@ -99,7 +97,8 @@ class Invaders(GameApp):
         if self._state == STATE_INACTIVE:
             self._text = GLabel(
                 text="Press 'S' to Play",
-                font_name="../Fonts/RetroGame",
+                font_name="../Fonts/Arcade",
+                font_size=56,
                 x=self.width // 2,
                 y=self.height // 2,
             )
@@ -157,8 +156,12 @@ class Invaders(GameApp):
         """
         # IMPLEMENT ME
 
-        if self.input.is_key_down("s"):
+        if self._state == STATE_INACTIVE and self.input.is_key_down("s"):
             self._state = STATE_NEWWAVE
+
+        if self._state == STATE_NEWWAVE:
+            self._wave = Wave()
+            self._state = STATE_ACTIVE
 
     def draw(self):
         """
@@ -177,8 +180,16 @@ class Invaders(GameApp):
         # IMPLEMENT ME
         if self._state == STATE_INACTIVE:
             if self._text:
-                self._text.draw(self._view)
+                self._text.draw(self.view)
         else:
             self._text = None
+
+        if self._state == STATE_ACTIVE:
+            if self._wave:
+                aliens_list = self._wave.get_aliens()
+                if aliens_list:
+                    for row in aliens_list:
+                        for alien in row:
+                            alien.draw(self.view)
 
     # HELPER METHODS FOR THE STATES GO HERE
