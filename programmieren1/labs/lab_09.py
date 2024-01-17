@@ -1,5 +1,6 @@
-import time
 import random
+import time
+
 
 def intersect(L1, L2):
     """
@@ -21,14 +22,25 @@ def intersect(L1, L2):
 
     return res
 
+
 def test_intersect():
     L1 = [1, 2, 3, 4, 5, 6]
-    L2 = [4, 4, 5, 5, 6, 6, 7, 8, 9,]
+    L2 = [
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        8,
+        9,
+    ]
     assert intersect(L1, L2) == [4, 5, 6]
 
 
 def g(n):
-    """ assume n >= 0
+    """assume n >= 0
     Returns n squared.
     """
     x = 0
@@ -38,8 +50,10 @@ def g(n):
 
     return x
 
+
 def g_1(n):
     return n**2
+
 
 def test_g():
     n = 12
@@ -51,6 +65,7 @@ def search(lst, element):
         if x == element:
             return True
     return False
+
 
 def test_search():
     assert search([1, 2, 3, 4, 5], 3)
@@ -67,6 +82,7 @@ def binary_search(lst, element):
 
     return binary_search(lst[:middle], element) | binary_search(lst[middle:], element)
 
+
 def test_binary_search():
     assert binary_search([1, 2, 3, 4, 5], 3)
     assert not binary_search([1, 2, 3, 4, 5], 8)
@@ -76,11 +92,12 @@ def bubble_sort(lst: list):
     swapped = True
     while swapped:
         swapped = False
-        for j in range(len(lst)-1):
-            if lst[j] > lst[j+1]:
-                lst[j], lst[j+1] = lst[j+1], lst[j]
+        for j in range(len(lst) - 1):
+            if lst[j] > lst[j + 1]:
+                lst[j], lst[j + 1] = lst[j + 1], lst[j]
                 swapped = True
     return lst
+
 
 def test_bubble_sort():
     lst = [2, 4, 1, 3, 6, 7, 5]
@@ -104,30 +121,35 @@ def selection_sort(lst: list):  # O(n**2)
 
     return lst
 
+
 def test_selection_sort():
     lst = [2, 4, 1, 3, 6, 7, 5]
     assert selection_sort(lst) == [1, 2, 3, 4, 5, 6, 7]
 
 
-def insertion_sort(lst: list):  # O(n**2) https://media.geeksforgeeks.org/wp-content/uploads/insertionsort.png
+def insertion_sort(
+    lst: list,
+):  # O(n**2) https://media.geeksforgeeks.org/wp-content/uploads/insertionsort.png
     swap_index = 1
 
     while swap_index < len(lst):
-
         index = swap_index
-        while index >= 1 and lst[index] < lst[index-1]:
-            lst[index], lst[index-1] = lst[index-1], lst[index]
+        while index >= 1 and lst[index] < lst[index - 1]:
+            lst[index], lst[index - 1] = lst[index - 1], lst[index]
             index -= 1
 
         swap_index += 1
     return lst
+
 
 def test_insertion_sort():
     lst = [2, 4, 1, 3, 6, 7, 5]
     assert insertion_sort(lst) == [1, 2, 3, 4, 5, 6, 7]
 
 
-def quick_sort(lst: list):  # O(n * log(n)) https://www.baeldung.com/wp-content/uploads/sites/4/2021/06/Quicksort-891x1024-1.png
+def quick_sort(
+    lst: list,
+):  # O(n * log(n)) https://www.baeldung.com/wp-content/uploads/sites/4/2021/06/Quicksort-891x1024-1.png
     if len(lst) == 1:
         return lst
     if len(lst) == 0:
@@ -137,7 +159,7 @@ def quick_sort(lst: list):  # O(n * log(n)) https://www.baeldung.com/wp-content/
     right = []
     pivot = lst[-1]
 
-    for i in range(len(lst)-1):
+    for i in range(len(lst) - 1):
         if lst[i] < pivot:
             left.append(lst[i])
         else:
@@ -151,14 +173,17 @@ def test_quick_sort():
     assert quick_sort(lst) == [1, 2, 3, 4, 5, 6, 7]
 
 
-def merge_sort(lst: list):  # O(n * log(n)) https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/300px-Merge_sort_algorithm_diagram.svg.png
+def merge_sort(
+    lst: list,
+):  # O(n * log(n)) https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Merge_sort_algorithm_diagram.svg/300px-Merge_sort_algorithm_diagram.svg.png
     if len(lst) <= 1:
         return lst
 
-    middle = len(lst)//2
+    middle = len(lst) // 2
     left = merge_sort(lst[:middle])
     right = merge_sort(lst[middle:])
     return merge(left, right)
+
 
 def merge(left, right):
     sortedList = []
@@ -181,6 +206,7 @@ def merge(left, right):
 
     return sortedList
 
+
 def test_merge_sort():
     lst = [2, 4, 1, 3, 6, 7, 5]
     assert merge_sort(lst) == [1, 2, 3, 4, 5, 6, 7]
@@ -197,6 +223,7 @@ def time_sorts(algos, size):
         stop = time.time()
         results["time"].append(stop - start)
     return results
+
 
 def time_printer_string(n):
     result = ""
