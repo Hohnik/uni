@@ -87,15 +87,15 @@ class Wave:
     # INITIALIZER (standard form) TO CREATE SHIP AND ALIENS
     def __init__(self):
         self._aliens = [
-            [Alien(source="../Images/alien1.png") for _ in range(5)],
-            [Alien(source="../Images/alien2.png") for _ in range(5)],
-            [Alien(source="../Images/alien2.png") for _ in range(5)],
-            [Alien(source="../Images/alien3.png") for _ in range(5)],
-            [Alien(source="../Images/alien3.png") for _ in range(5)],
+            [Alien(source="../Images/alien1.png") for _ in range(8)],
+            [Alien(source="../Images/alien2.png") for _ in range(8)],
+            [Alien(source="../Images/alien2.png") for _ in range(8)],
+            [Alien(source="../Images/alien3.png") for _ in range(8)],
+            [Alien(source="../Images/alien3.png") for _ in range(8)],
         ]
 
-        for ii in range(5):
-            for i in range(8):
+        for row_idx in range(5):
+            for col_idx in range(8):
                 self._aliens[ii][i].top = ALIEN_H_SEP * i + (i - 1) * ALIEN_WIDTH
                 self._aliens[ii][i].left = ALIEN_CEILING + (ii - 1) * (
                     ALIEN_V_SEP + ALIEN_WIDTH
