@@ -76,8 +76,8 @@ class Wave:
     # You may also add any new attributes as long as you document them.
     # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
     _ship = None
-    _aliens = None
-    _bolts = None
+    _aliens = []
+    _bolts = []
     _dline = None
     _lives = None
     _time = None
@@ -87,26 +87,56 @@ class Wave:
     # INITIALIZER (standard form) TO CREATE SHIP AND ALIENS
     def __init__(self):
         self._aliens = [
-            [Alien(source="../Images/alien1.png") for _ in range(8)],
-            [Alien(source="../Images/alien2.png") for _ in range(8)],
-            [Alien(source="../Images/alien2.png") for _ in range(8)],
-            [Alien(source="../Images/alien3.png") for _ in range(8)],
-            [Alien(source="../Images/alien3.png") for _ in range(8)],
+            [
+                Alien(source="../Images/alien3.png")
+                for _ in range(ALIENS_IN_ROW)
+                if ALIEN_ROWS >= 1
+            ],
+            [
+                Alien(source="../Images/alien2.png")
+                for _ in range(ALIENS_IN_ROW)
+                if ALIEN_ROWS >= 2
+            ],
+            [
+                Alien(source="../Images/alien2.png")
+                for _ in range(ALIENS_IN_ROW)
+                if ALIEN_ROWS >= 3
+            ],
+            [
+                Alien(source="../Images/alien1.png")
+                for _ in range(ALIENS_IN_ROW)
+                if ALIEN_ROWS >= 4
+            ],
+            [
+                Alien(source="../Images/alien1.png")
+                for _ in range(ALIENS_IN_ROW)
+                if ALIEN_ROWS >= 5
+            ],
         ]
 
-        for row_idx in range(5):
-            for col_idx in range(8):
-                self._aliens[ii][i].top = ALIEN_H_SEP * i + (i - 1) * ALIEN_WIDTH
-                self._aliens[ii][i].left = ALIEN_CEILING + (ii - 1) * (
-                    ALIEN_V_SEP + ALIEN_WIDTH
+        for row_idx in range(ALIEN_ROWS):
+            for col_idx in range(ALIENS_IN_ROW):
+                self._aliens[row_idx][col_idx].width = ALIEN_WIDTH
+                self._aliens[row_idx][col_idx].height = ALIEN_HEIGHT
+                self._aliens[row_idx][col_idx].x = (
+                    ALIEN_H_SEP
+                    + 1 / 2 * ALIEN_WIDTH
+                    + col_idx * (ALIEN_H_SEP + ALIEN_WIDTH)
                 )
-
-                self._aliens[ii][i].width = ALIEN_WIDTH
-                self._aliens[ii][i].height = ALIEN_HEIGHT
+                self._aliens[row_idx][col_idx].y = (
+                    GAME_HEIGHT
+                    - ALIEN_CEILING
+                    - 1 / 2 * ALIEN_HEIGHT
+                    - row_idx * (ALIEN_V_SEP + ALIEN_HEIGHT)
+                )
 
     # UPDATE METHOD TO MOVE THE SHIP, ALIENS, AND LASER BOLTS
 
     # DRAW METHOD TO DRAW THE SHIP, ALIENS, DEFENSIVE LINE AND BOLTS
+    def draw(self, view):
+        for row in self._aliens:
+            for alien in row:
+                alien.draw(view)
 
     # HELPER METHODS FOR COLLISION DETECTION
     def get_aliens(self):

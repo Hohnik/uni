@@ -12,7 +12,7 @@ question on Piazza.
 """
 from consts import *
 from game2d import *
-from wave_f import *
+from wave_f import Wave
 
 # PRIMARY RULE: Invaders can only access attributes in wave.py via getters/setters
 # Invaders is NOT allowed to access anything in models.py
@@ -186,10 +186,6 @@ class Invaders(GameApp):
 
         if self._state == STATE_ACTIVE:
             if self._wave:
-                aliens_list = self._wave.get_aliens()
-                if aliens_list:
-                    for row in aliens_list:
-                        for alien in row:
-                            alien.draw(self.view)
+                self._wave.draw(self.view)
 
     # HELPER METHODS FOR THE STATES GO HERE
