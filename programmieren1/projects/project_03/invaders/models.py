@@ -131,13 +131,19 @@ class Bolt(GRectangle):
     # Invariant: _velocity is an int or float
 
     # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
-    pass
+    _velicity = 0
 
     # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
 
     # INITIALIZER TO SET THE VELOCITY
+    def __init__(self):
+        super().__init__()
+        self.height = BOLT_HEIGHT
+        self.width = BOLT_WIDTH
+        self.linewidth = 1
+        # self.linecolor = "red"
+        self.linecolor = [0.2, 0.2, 0.2, 1]
 
     # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
 
-
-# IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE
+    # IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE

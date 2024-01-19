@@ -161,7 +161,12 @@ class Invaders(GameApp):
 
         if self._state == STATE_NEWWAVE:
             self._wave = Wave()
+            self._wave.move_aliens("right")
             self._state = STATE_ACTIVE
+
+        if self._state == STATE_ACTIVE:
+            if self._wave:
+                self._wave.update(dt, self.input)
 
     def draw(self):
         """
