@@ -131,19 +131,28 @@ class Bolt(GRectangle):
     # Invariant: _velocity is an int or float
 
     # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
-    _velicity = 0
+    _velocity = 0
+    _deg = 0
 
     # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
 
     # INITIALIZER TO SET THE VELOCITY
-    def __init__(self):
+    def __init__(self, game_object: GObject):
         super().__init__()
         self.height = BOLT_HEIGHT
         self.width = BOLT_WIDTH
         self.linewidth = 1
-        # self.linecolor = "red"
-        self.linecolor = [0.2, 0.2, 0.2, 1]
+        self.linecolor = [0, 1, 1, 1]
+
+        self.x = game_object.x
+        self.y = game_object.y + 0.5 * SHIP_HEIGHT
 
     # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
+
+    def update(self):
+        self.y += BOLT_SPEED
+        # self._deg = self._deg + 0.01 if self._deg + 0.01 < 1 else 0
+        self._deg += 0.1
+        self.linecolor = [self._deg % 1, 1 - self._deg % 1, 1, 1]
 
     # IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE

@@ -109,6 +109,7 @@ class Wave:
 
             if self._bolts:
                 for bolt in self._bolts:
+                    bolt.update()
                     self.move_bolt(bolt)
 
         if input.is_key_down("left") or input.is_key_down("j"):
@@ -122,11 +123,10 @@ class Wave:
             or input.is_key_down("up")
             or input.is_key_down("f")
         ):
-            bolt = Bolt()
-            if self._ship:
-                bolt.x = self._ship.x
-                bolt.y = self._ship.y + 0.5 * SHIP_HEIGHT
+            bolt = Bolt(self._ship)
             self._bolts.append(bolt)
+        if self._bolts[-1].y > GAME_HEIGHT or self._bolts[-1].y < GAME_WIDTH:
+            self._bolts.pop()
 
     # DRAW METHOD TO DRAW THE SHIP, ALIENS, DEFENSIVE LINE AND BOLTS
     def draw(self, view):
