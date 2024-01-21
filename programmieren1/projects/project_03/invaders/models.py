@@ -72,12 +72,13 @@ class Ship(GImage):
 
     def update(self, input):
         # Shoot form ship
-        if (
-            input.is_key_down("spacebar")
-            or input.is_key_down("up")
-            or input.is_key_down("f")
-        ):
-            self.shoot()
+        if not list(filter(lambda bolt: bolt.is_player_bolt, self._wave._bolts)):
+            if (
+                input.is_key_down("spacebar")
+                or input.is_key_down("up")
+                or input.is_key_down("f")
+            ):
+                self.shoot()
 
         # Movement
         if input.is_key_down("left") or input.is_key_down("j"):
