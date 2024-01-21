@@ -75,6 +75,7 @@ class Invaders(GameApp):
     _state = STATE_INACTIVE
     _text = None
     _wave = None
+    _tps = GLabel()
 
     # THREE MAIN GAMEAPP METHODS
     def start(self):
@@ -102,6 +103,13 @@ class Invaders(GameApp):
                 x=self.width // 2,
                 y=self.height // 2,
             )
+
+        self._tps.text = "50"
+        self._tps.font_size = 30
+        self._tps.width = 30
+        self._tps.height = 20
+        self._tps.x = GAME_WIDTH - self._tps.width
+        self._tps.y = GAME_HEIGHT - self._tps.height
 
     def update(self, dt):
         """
@@ -168,6 +176,8 @@ class Invaders(GameApp):
             if self._wave:
                 self._wave.update(dt, self.input)
 
+        self._tps.text = str(round(dt * 100, 2))
+
     def draw(self):
         """
         Draws the game objects to the view.
@@ -183,6 +193,7 @@ class Invaders(GameApp):
         from class.
         """
         # IMPLEMENT ME
+
         if self._state == STATE_INACTIVE:
             if self._text:
                 self._text.draw(self.view)
@@ -192,5 +203,7 @@ class Invaders(GameApp):
         if self._state == STATE_ACTIVE:
             if self._wave:
                 self._wave.draw(self.view)
+
+        self._tps.draw(self.view)
 
     # HELPER METHODS FOR THE STATES GO HERE

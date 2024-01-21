@@ -25,6 +25,8 @@ about whether to make a new class or not, please ask on Piazza.
 # YOUR NAME(S) AND NETID(S) HERE
 # DATE COMPLETED HERE
 """
+from typing import Literal, Union
+
 from consts import *
 from game2d import *
 
@@ -58,18 +60,45 @@ class Ship(GImage):
     for extra gameplay features (like animation).
     """
 
-    #  IF YOU ADD ATTRIBUTES, LIST THEM BELOW
-    pass
+    def __init__(self, wave):
+        super().__init__(
+            x=GAME_WIDTH // 2,
+            y=SHIP_HEIGHT // 2 + SHIP_BOTTOM,
+            width=SHIP_WIDTH,
+            height=SHIP_HEIGHT,
+            source="../Images/" + SHIP_IMAGE,
+        )
+        self._wave = wave
 
-    # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
+    def update(self, input):
+        # Shoot form ship
+        if (
+            input.is_key_down("spacebar")
+            or input.is_key_down("up")
+            or input.is_key_down("f")
+        ):
+            self.shoot()
 
-    # INITIALIZER TO CREATE A NEW SHIP
+        # Movement
+        if input.is_key_down("left") or input.is_key_down("j"):
+            self.move_left()
 
-    # METHODS TO MOVE THE SHIP AND CHECK FOR COLLISIONS
+        if input.is_key_down("right") or input.is_key_down("l"):
+            self.move_right()
 
-    # COROUTINE METHOD TO ANIMATE THE SHIP
+    def move_right(self):
+        if self.x < GAME_WIDTH - 1 / 2 * SHIP_WIDTH:
+            self.x += SHIP_MOVEMENT
 
-    # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
+    def move_left(self):
+        if self.x > 1 / 2 * SHIP_WIDTH:
+            self.x -= SHIP_MOVEMENT
+
+    def shoot(self):
+        self._wave._bolts.append(Bolt(self, "up", is_player_bolt=True))
+
+    def get_wave(self):
+        return self._wave
 
 
 class Alien(GImage):
@@ -100,7 +129,24 @@ class Alien(GImage):
     # METHOD TO CHECK FOR COLLISION (IF DESIRED)
 
     # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
-    pass
+
+    _wave = None
+
+    def __init__(self, wave, **keywords):
+        super().__init__(**keywords)
+        self._wave = wave
+
+    def move_right(self):
+        self.x += ALIEN_H_WALK
+
+    def move_left(self):
+        self.x -= ALIEN_H_WALK
+
+    def move_down(self):
+        self.y -= ALIEN_V_WALK
+
+    def get_wave(self):
+        return self._wave
 
 
 class Bolt(GRectangle):
@@ -130,29 +176,44 @@ class Bolt(GRectangle):
     # Attribute _velocity: the velocity in y direction
     # Invariant: _velocity is an int or float
 
-    # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
-    _velocity = 0
-    _deg = 0
+    _direction: Literal["up", "down"] = "up"
+    is_player_bolt: bool = False
 
-    # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
-
-    # INITIALIZER TO SET THE VELOCITY
-    def __init__(self, game_object: GObject):
+    def __init__(
+        self,
+        game_object: Union[Alien, Ship],
+        direction: Literal["up", "down"],
+        is_player_bolt=False,
+    ):
         super().__init__()
         self.height = BOLT_HEIGHT
         self.width = BOLT_WIDTH
         self.linewidth = 1
-        self.linecolor = [0, 1, 1, 1]
+        self.linecolor = [0, 0, 0, 1]
 
+        self._direction = direction
+        self.is_player_bolt = is_player_bolt
         self.x = game_object.x
         self.y = game_object.y + 0.5 * SHIP_HEIGHT
-
-    # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
+        self._wave = game_object.get_wave()
 
     def update(self):
-        self.y += BOLT_SPEED
-        # self._deg = self._deg + 0.01 if self._deg + 0.01 < 1 else 0
-        self._deg += 0.1
-        self.linecolor = [self._deg % 1, 1 - self._deg % 1, 1, 1]
+        if self.bottom > GAME_HEIGHT or self.top < 0:
+            if self._wave:
+                if self._wave._bolts:
+                    self._wave._bolts.remove(self)
 
-    # IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE
+        if self._direction == "up":
+            self.move_up()
+
+        elif self._direction == "down":
+            self.move_down()
+
+    def move_up(self):
+        self.y += BOLT_SPEED
+
+    def move_down(self):
+        self.y -= BOLT_SPEED
+
+
+# IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE

@@ -18,6 +18,7 @@ answer.
 """
 import random
 from os import walk
+from typing import List, Union
 
 from consts import *
 from game2d import *
@@ -79,8 +80,8 @@ class Wave:
     # LIST MORE ATTRIBUTES (AND THEIR INVARIANTS) HERE IF NECESSARY
     _ship = None
     _dline = None
-    _aliens = []
-    _bolts = []
+    _aliens: List[List[Alien]] = []
+    _bolts: List[Bolt] = []
     _lives = None
     _time = 0
     _direction = "right"
@@ -96,43 +97,25 @@ class Wave:
     # UPDATE METHOD TO MOVE THE SHIP, ALIENS, AND LASER BOLTS
     def update(self, dt, input: GInput):
         self._time += dt
+
+        if self._ship:
+            self._ship.update(input)
+
+        if self._bolts:
+            for bolt in self._bolts:
+                bolt.update()
+
+        # Move aliens
         if self._time >= ALIEN_SPEED:
             self._direction = self.calculate_direction()
-
             self.move_aliens(self._direction)
-            # if self._direction == "right":
-            #     self.move_aliens("right")
-            # elif self._direction == "left":
-            #     self.move_aliens("left")
-            # elif self._direction == "down":
-            #     self.move_aliens("down")
-
-            if self._bolts:
-                for bolt in self._bolts:
-                    bolt.update()
-                    self.move_bolt(bolt)
-
-        if input.is_key_down("left") or input.is_key_down("j"):
-            self.move_ship_left(self._ship)
-
-        if input.is_key_down("right") or input.is_key_down("l"):
-            self.move_ship_right(self._ship)
-
-        if (
-            input.is_key_down("spacebar")
-            or input.is_key_down("up")
-            or input.is_key_down("f")
-        ):
-            bolt = Bolt(self._ship)
-            self._bolts.append(bolt)
-        if self._bolts[-1].y > GAME_HEIGHT or self._bolts[-1].y < GAME_WIDTH:
-            self._bolts.pop()
 
     # DRAW METHOD TO DRAW THE SHIP, ALIENS, DEFENSIVE LINE AND BOLTS
     def draw(self, view):
         for row in self._aliens:
             for alien in row:
-                alien.draw(view)
+                if alien:
+                    alien.draw(view)
 
         if self._ship:
             self._ship.draw(view)
@@ -141,23 +124,8 @@ class Wave:
             self._dline.draw(view)
 
         for bolt in self._bolts:
-            bolt.draw(view)
-
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
+            if bolt:
+                bolt.draw(view)
 
     # HELPER METHODS FOR COLLISION DETECTION
     def init_dline(self):
@@ -168,38 +136,32 @@ class Wave:
         )
 
     def init_ship(self):
-        self._ship = Ship(
-            x=GAME_WIDTH // 2,
-            y=SHIP_HEIGHT // 2 + SHIP_BOTTOM,
-            width=SHIP_WIDTH,
-            height=SHIP_HEIGHT,
-            source="../Images/" + SHIP_IMAGE,
-        )
+        self._ship = Ship(self)
 
     def init_alien(self):
         self._aliens = [
             [
-                Alien(source="../Images/" + ALIEN_IMAGES[2])
+                Alien(self, source="../Images/" + ALIEN_IMAGES[2])
                 for _ in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 1
             ],
             [
-                Alien(source="../Images/" + ALIEN_IMAGES[1])
+                Alien(self, source="../Images/" + ALIEN_IMAGES[1])
                 for _ in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 2
             ],
             [
-                Alien(source="../Images/" + ALIEN_IMAGES[1])
+                Alien(self, source="../Images/" + ALIEN_IMAGES[1])
                 for _ in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 3
             ],
             [
-                Alien(source="../Images/" + ALIEN_IMAGES[0])
+                Alien(self, source="../Images/" + ALIEN_IMAGES[0])
                 for _ in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 4
             ],
             [
-                Alien(source="../Images/" + ALIEN_IMAGES[0])
+                Alien(self, source="../Images/" + ALIEN_IMAGES[0])
                 for _ in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 5
             ],
@@ -221,45 +183,25 @@ class Wave:
                     - row_idx * (ALIEN_V_SEP + ALIEN_HEIGHT)
                 )
 
-    def move_ship_right(self, game_object):
-        if game_object.x < GAME_WIDTH - 1 / 2 * SHIP_WIDTH:
-            game_object.x += SHIP_MOVEMENT
-
-    def move_ship_left(self, game_object):
-        if game_object.x > 1 / 2 * SHIP_WIDTH:
-            game_object.x -= SHIP_MOVEMENT
-
-    def move_alien_right(self, game_object):
-        game_object.x += ALIEN_H_WALK
-
-    def move_alien_left(self, game_object):
-        game_object.x -= ALIEN_H_WALK
-
-    def move_alien_down(self, game_object):
-        game_object.y -= ALIEN_V_WALK
-
     def move_aliens(self, direction: str):
         for row in self._aliens:
             for alien in row:
                 if direction == "right":
-                    self.move_alien_right(alien)
+                    alien.move_right()
                 elif direction == "left":
-                    self.move_alien_left(alien)
+                    alien.move_left()
                 elif direction == "down":
-                    self.move_alien_down(alien)
+                    alien.move_down()
+
         self._time = 0
 
     def calculate_direction(self):
-        if (
-            self.leftmost_alien_x() <= ALIEN_H_SEP + 0.5 * ALIEN_WIDTH
-            and self._direction == "down"
-        ):
-            return "right"
-        if (
-            self.rightmost_alien_x() >= GAME_WIDTH - ALIEN_H_SEP - 0.5 * ALIEN_WIDTH
-            and self._direction == "down"
-        ):
-            return "left"
+        if self._direction == "down":
+            if self.leftmost_alien_x() <= ALIEN_H_SEP + 0.5 * ALIEN_WIDTH:
+                return "right"
+            if self.rightmost_alien_x() >= GAME_WIDTH - ALIEN_H_SEP - 0.5 * ALIEN_WIDTH:
+                return "left"
+
         if (
             self.leftmost_alien_x() <= ALIEN_H_SEP + 0.5 * ALIEN_WIDTH
             or self.rightmost_alien_x() >= GAME_WIDTH - ALIEN_H_SEP - 0.5 * ALIEN_WIDTH
@@ -268,21 +210,19 @@ class Wave:
 
         return self._direction
 
-    def rightmost_alien_x(self):  # TODO: Loop through aliens and find highest x value
+    def rightmost_alien_x(self):
         max_value = -float("inf")
+
         for row in self._aliens:
-            row_max = max([alien.x for alien in row])
-            if row_max > max_value:
-                max_value = row_max
+            if row[-1].x > max_value:
+                max_value = row[-1].x
+
         return max_value
 
-    def leftmost_alien_x(self):  # TODO: Loop through aliens and find lowest x value
+    def leftmost_alien_x(self):
         min_value = float("inf")
         for row in self._aliens:
-            row_min = min([alien.x for alien in row])
-            if row_min < min_value:
-                min_value = row_min
-        return min_value
+            if row[0].x < min_value:
+                min_value = row[0].x
 
-    def move_bolt(self, bolt: Bolt):
-        bolt.y += BOLT_SPEED
+        return min_value
