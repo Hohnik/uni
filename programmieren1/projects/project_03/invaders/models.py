@@ -131,11 +131,10 @@ class Alien(GImage):
 
     # ADD MORE METHODS (PROPERLY SPECIFIED) AS NECESSARY
 
-    _wave = None
-
-    def __init__(self, wave, **keywords):
+    def __init__(self, wave, col_number, **keywords):
         super().__init__(**keywords)
         self._wave = wave
+        self._col_number = col_number
 
     def move_right(self):
         self.x += ALIEN_H_WALK
@@ -148,6 +147,13 @@ class Alien(GImage):
 
     def get_wave(self):
         return self._wave
+
+    def get_column(self):
+        return self._col_number
+
+    def shoot(self):
+        if self._wave:
+            self._wave._bolts.append(Bolt(self, "down"))
 
 
 class Bolt(GRectangle):
@@ -189,13 +195,19 @@ class Bolt(GRectangle):
         super().__init__()
         self.height = BOLT_HEIGHT
         self.width = BOLT_WIDTH
-        self.linewidth = 1
+        self.linewidth = 2
         self.linecolor = [0, 0, 0, 1]
 
         self._direction = direction
         self.is_player_bolt = is_player_bolt
-        self.x = game_object.x
-        self.y = game_object.y + 0.5 * SHIP_HEIGHT
+
+        if is_player_bolt:
+            self.x = game_object.x
+            self.y = game_object.y + 0.5 * SHIP_HEIGHT
+        else:
+            self.x = game_object.x
+            self.y = game_object.y - 0.5 * ALIEN_HEIGHT
+
         self._wave = game_object.get_wave()
 
     def update(self):

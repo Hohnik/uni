@@ -17,6 +17,7 @@ answer.
 # DATE COMPLETED HERE
 """
 import random
+from collections import defaultdict
 from os import walk
 from typing import List, Union
 
@@ -85,6 +86,7 @@ class Wave:
     _lives = None
     _time = 0
     _direction = "right"
+    _next_bolt_counter = random.choice([x for x in range(1, BOLT_RATE)])
 
     # GETTERS AND SETTERS (ONLY ADD IF YOU NEED THEM)
 
@@ -98,17 +100,32 @@ class Wave:
     def update(self, dt, input: GInput):
         self._time += dt
 
+        # Update ship
         if self._ship:
             self._ship.update(input)
 
+        # Update bolts
         if self._bolts:
             for bolt in self._bolts:
                 bolt.update()
 
         # Move aliens
         if self._time >= ALIEN_SPEED:
-            self._direction = self.calculate_direction()
+            self._direction = self.calculate_alien_movement_direction()
             self.move_aliens(self._direction)
+
+            # Shoot from downmost random alien
+            shooter_alien = random.choice(self.downmost_aliens())
+            self._next_bolt_counter -= 1
+            if self._next_bolt_counter == 0:
+                shooter_alien.shoot()
+                self._next_bolt_counter = random.choice(
+                    [x for x in range(1, BOLT_RATE)]
+                )
+
+        # Reset boltcounter
+        if self._next_bolt_counter <= 0:
+            self._next_bolt_counter = random.choice([x for x in range(1, BOLT_RATE)])
 
     # DRAW METHOD TO DRAW THE SHIP, ALIENS, DEFENSIVE LINE AND BOLTS
     def draw(self, view):
@@ -141,28 +158,28 @@ class Wave:
     def init_alien(self):
         self._aliens = [
             [
-                Alien(self, source="../Images/" + ALIEN_IMAGES[2])
-                for _ in range(ALIENS_IN_ROW)
+                Alien(self, i, source="../Images/" + ALIEN_IMAGES[2])
+                for i in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 1
             ],
             [
-                Alien(self, source="../Images/" + ALIEN_IMAGES[1])
-                for _ in range(ALIENS_IN_ROW)
+                Alien(self, i, source="../Images/" + ALIEN_IMAGES[1])
+                for i in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 2
             ],
             [
-                Alien(self, source="../Images/" + ALIEN_IMAGES[1])
-                for _ in range(ALIENS_IN_ROW)
+                Alien(self, i, source="../Images/" + ALIEN_IMAGES[1])
+                for i in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 3
             ],
             [
-                Alien(self, source="../Images/" + ALIEN_IMAGES[0])
-                for _ in range(ALIENS_IN_ROW)
+                Alien(self, i, source="../Images/" + ALIEN_IMAGES[0])
+                for i in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 4
             ],
             [
-                Alien(self, source="../Images/" + ALIEN_IMAGES[0])
-                for _ in range(ALIENS_IN_ROW)
+                Alien(self, i, source="../Images/" + ALIEN_IMAGES[0])
+                for i in range(ALIENS_IN_ROW)
                 if ALIEN_ROWS >= 5
             ],
         ]
@@ -195,7 +212,7 @@ class Wave:
 
         self._time = 0
 
-    def calculate_direction(self):
+    def calculate_alien_movement_direction(self):
         if self._direction == "down":
             if self.leftmost_alien_x() <= ALIEN_H_SEP + 0.5 * ALIEN_WIDTH:
                 return "right"
@@ -226,3 +243,16 @@ class Wave:
                 min_value = row[0].x
 
         return min_value
+
+    def downmost_aliens(self):  # Downmost alien of every column
+        aliens_by_column = defaultdict(list)
+        for row_number, row in enumerate(self._aliens):
+            if row_number == ALIEN_ROWS - 1:
+                return row
+            if len(row) == ALIEN_ROWS:
+                continue
+
+            for alien in row:
+                aliens_by_column[alien.get_column()].append(alien)
+
+        return [alien[-1] for _, alien in aliens_by_column]
