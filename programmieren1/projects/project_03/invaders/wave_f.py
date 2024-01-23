@@ -100,6 +100,23 @@ class Wave:
     def update(self, dt, input: GInput):
         self._time += dt
 
+        # Check alien collisions
+        for row_idx, row in enumerate(self._aliens):
+            for alien in row:
+                for bolt in self._bolts:
+                    if alien.collides(bolt):
+                        try:
+                            self._aliens[row_idx].remove(alien)
+                            self._bolts.remove(bolt)
+                        except:
+                            pass
+
+        # Check ship collisions
+        for bolt in self._bolts:
+            if self._ship and self._ship.collides(bolt):
+                self._ship = None
+                self._bolts.remove(bolt)
+
         # Update ship
         if self._ship:
             self._ship.update(input)

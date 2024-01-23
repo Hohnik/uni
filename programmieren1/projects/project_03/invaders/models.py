@@ -71,14 +71,22 @@ class Ship(GImage):
         self._wave = wave
 
     def update(self, input):
-        # Shoot form ship
-        if not list(filter(lambda bolt: bolt.is_player_bolt, self._wave._bolts)):
-            if (
-                input.is_key_down("spacebar")
-                or input.is_key_down("up")
-                or input.is_key_down("f")
-            ):
-                self.shoot()
+        # Godmode
+        if (
+            input.is_key_down("spacebar")
+            or input.is_key_down("up")
+            or input.is_key_down("f")
+        ):
+            self.shoot()
+
+        # # Shoot form ship
+        # if not list(filter(lambda bolt: bolt.is_player_bolt, self._wave._bolts)):
+        #     if (
+        #         input.is_key_down("spacebar")
+        #         or input.is_key_down("up")
+        #         or input.is_key_down("f")
+        #     ):
+        #         self.shoot()
 
         # Movement
         if input.is_key_down("left") or input.is_key_down("j"):
@@ -100,6 +108,16 @@ class Ship(GImage):
 
     def get_wave(self):
         return self._wave
+
+    def collides(self, bolt):
+        if bolt.is_player_bolt:
+            return False
+
+        for corner in bolt.get_corners():
+            if self.contains(corner):
+                return True
+
+        return False
 
 
 class Alien(GImage):
@@ -154,6 +172,16 @@ class Alien(GImage):
     def shoot(self):
         if self._wave:
             self._wave._bolts.append(Bolt(self, "down"))
+
+    def collides(self, bolt):
+        if not bolt.is_player_bolt:
+            return False
+
+        for corner in bolt.get_corners():
+            if self.contains(corner):
+                return True
+
+        return False
 
 
 class Bolt(GRectangle):
@@ -227,6 +255,20 @@ class Bolt(GRectangle):
 
     def move_down(self):
         self.y -= BOLT_SPEED
+
+    def corner(self, dx, dy):
+        x, y = self.x, self.y
+        x -= dx * (1 / 2 * BOLT_WIDTH)
+        y += dy * (1 / 2 * BOLT_HEIGHT)
+        return x, y
+
+    def get_corners(self):
+        tr = self.corner(1, 1)
+        br = self.corner(1, -1)
+        tl = self.corner(-1, 1)
+        bl = self.corner(-1, -1)
+
+        return tl, tr, br, bl
 
 
 # IF YOU NEED ADDITIONAL MODEL CLASSES, THEY GO HERE
