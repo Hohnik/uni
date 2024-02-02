@@ -96,10 +96,87 @@ def get_kth_digit(n, k):
     """
     n = abs(n)
     rest = None
-    for i in range(k + 1):
+    for _ in range(k + 1):
         n, rest = divmod(n, 10)
     return rest
 
 
+def set_kth_digit(n, k, d):
+    """
+    >>> set_kth_digit(468, 0, 1)
+    461
+    >>> set_kth_digit(468, 1, 1)
+    418
+    >>> set_kth_digit(468, 2, 1)
+    168
+    >>> set_kth_digit(468, 3, 1)
+    1468
+    """
+    left, right = divmod(n, 10**k)
+    result = ((left // 10) * 10 + d) * 10**k + right
+    return result
+
+
+def sum_digits(y):
+    """
+    >>> sum_digits(10) # 1 + 0 = 1
+    1
+    >>> sum_digits(4224) # 4 + 2 + 2 + 4 = 12
+    12
+    >>> sum_digits(1234567890)
+    45
+    >>> a = sum_digits(123) # use return rather than print in your code!
+    >>> a
+    6
+    """
+    result = 0
+
+    while True:
+        if y <= 0:
+            break
+
+        y, rest = divmod(y, 10)
+        result += rest
+
+    return result
+
+
+def oddSum(L):
+    """
+    >>> oddSum([1,2,3,4])
+    4
+    >>> oddSum([])
+    0
+    >>> oddSum([2,4,6])
+    0
+    >>> oddSum([1,3,5])
+    9
+    """
+    if len(L) <= 0:
+        return 0
+
+    digit = L.pop()
+
+    if digit % 2 != 0:
+        return digit + oddSum(L)
+    return 0 + oddSum(L)
+
+
+class Person:
+    def __init__(self, name: str) -> None:
+        self.name = name
+        print("init")
+
+    def __add__(self, other):
+        return [self, other]
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+
 if __name__ == "__main__":
     doctest.testmod()
+    print(locals())
