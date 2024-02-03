@@ -113,8 +113,7 @@ def set_kth_digit(n, k, d):
     1468
     """
     left, right = divmod(n, 10**k)
-    result = ((left // 10) * 10 + d) * 10**k + right
-    return result
+    return ((left // 10) * 10 + d) * 10**k + right
 
 
 def sum_digits(y):
