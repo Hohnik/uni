@@ -25,6 +25,7 @@ about whether to make a new class or not, please ask on Piazza.
 # YOUR NAME(S) AND NETID(S) HERE
 # DATE COMPLETED HERE
 """
+
 from typing import Literal, Union
 
 from consts import *
@@ -71,22 +72,22 @@ class Ship(GImage):
         self._wave = wave
 
     def update(self, input):
-        # Godmode
-        if (
-            input.is_key_down("spacebar")
-            or input.is_key_down("up")
-            or input.is_key_down("f")
-        ):
-            self.shoot()
+        # # Godmode
+        # if (
+        #     input.is_key_down("spacebar")
+        #     or input.is_key_down("up")
+        #     or input.is_key_down("f")
+        # ):
+        #     self.shoot()
 
-        # # Shoot form ship
-        # if not list(filter(lambda bolt: bolt.is_player_bolt, self._wave._bolts)):
-        #     if (
-        #         input.is_key_down("spacebar")
-        #         or input.is_key_down("up")
-        #         or input.is_key_down("f")
-        #     ):
-        #         self.shoot()
+        # Shoot form ship
+        if not list(filter(lambda bolt: bolt.is_player_bolt, self._wave._bolts)):
+            if (
+                input.is_key_down("spacebar")
+                or input.is_key_down("up")
+                or input.is_key_down("f")
+            ):
+                self.shoot()
 
         # Movement
         if input.is_key_down("left") or input.is_key_down("j"):
