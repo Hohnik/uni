@@ -63,7 +63,7 @@ The installation guide: https://wiki.archlinux.org/title/installation_guide#
 29. Type `mount --mkdir /dev/vda1 /mnt/boot` to mount the boot partition
 30. Type `swapon /dev/vda2` to activate the swap
 
-31. Type `pacstrap -K /mnt base base-devel linux linux-firmware e2fsprogs dhcpcd networkmanager vim neovim man-db man-pages texinfo` to install all needed packages for your system
+31. Type `pacstrap -K /mnt base base-devel linux linux-firmware e2fsprogs dhcpcd networkmanager mkinitcpio vim neovim man-db man-pages texinfo` to install all needed packages for your system
 32. Type `genfstab -U /mnt >> /mnt/etc/fstab` populate the fstab file
 
 33. Type `arch-chroot /mnt` to change into the main system
