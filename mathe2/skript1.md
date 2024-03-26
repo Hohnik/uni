@@ -49,3 +49,7 @@ Es gibt genau einen vollständigen, angeordneten Körper. Dieser ist |R.
 
 **Bsp.:**
 \sqrt{2} elem |R, denn \sqrt{2} = sup{x elem |R: x^2 \leq 2}
+
+a) zu $0<x<y$ gibt es ein $n \in \mathbb{N}$ mit $n\times x > y$  
+b) zu $x>0$ gibt es ein $n \in \mathbb{N}$ mit $\frac{1}{n}<x$  
+c) zu $x \in \mathbb{R}$ existiert $m = max\{z \in \mathbb{Z}: z \le x\}$  
